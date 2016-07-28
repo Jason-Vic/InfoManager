@@ -19,15 +19,15 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 public class Login {
-	private JFrame frame = new JFrame("µÇÂ¼");
+	private JFrame frame = new JFrame("ç™»å½•");
 	private Container c = frame.getContentPane();
 	private JTextField username = new JTextField();
 	private JPasswordField password = new JPasswordField();
-	private JButton ok = new JButton("È·¶¨");
-	private JButton cancel = new JButton("È¡Ïû");
-	private JRadioButton btn1 = new JRadioButton("Ñ§Éú");
-	private JRadioButton btn2 = new JRadioButton("ÀÏÊ¦");
-	private JRadioButton btn3 = new JRadioButton("¹ÜÀíÔ±");
+	private JButton ok = new JButton("ç™»é™†");
+	private JButton cancel = new JButton("å–æ¶ˆ");
+	private JRadioButton btn1 = new JRadioButton("å­¦ç”Ÿ");
+	private JRadioButton btn2 = new JRadioButton("è€å¸ˆ");
+	private JRadioButton btn3 = new JRadioButton("ç®¡ç†å‘˜");
 	private ButtonGroup group = new ButtonGroup();
 
 	public Login() {
@@ -69,22 +69,22 @@ public class Login {
 	}
 
 	private void initFrame() {
-		// ¶¥²¿
+		// ï¿½ï¿½ï¿½ï¿½
 		JPanel titlePanel = new JPanel();
 		titlePanel.setLayout(new FlowLayout());
-		JLabel lt = new JLabel("ÇëµÇÂ¼");
+		JLabel lt = new JLabel("è¯·ç™»å½•");
 		lt.setFont(new java.awt.Font("Dialog", 1, 20));
 		titlePanel.add(lt);
 		c.add(titlePanel, "North");
 
-		// ÖĞ²¿±íµ¥
+		// ï¿½Ğ²ï¿½ï¿½ï¿½
 		JPanel fieldPanel = new JPanel();
 		fieldPanel.setLayout(null);
-		JLabel l1 = new JLabel("µÇÂ½Ãû:");
+		JLabel l1 = new JLabel("ç™»é™†å:");
 		l1.setBounds(75, 20, 50, 20);
-		JLabel l2 = new JLabel("ÃÜ    Âë:");
+		JLabel l2 = new JLabel("å¯†    ç :");
 		l2.setBounds(75, 60, 50, 20);
-		JLabel l3 = new JLabel("½ÇÉ«:");
+		JLabel l3 = new JLabel("è§’è‰²:");
 		l3.setBounds(75, 100, 50, 20);
 		fieldPanel.add(l1);
 		fieldPanel.add(l2);
@@ -104,7 +104,7 @@ public class Login {
 		fieldPanel.add(btn3);
 		c.add(fieldPanel, "Center");
 
-		// µ×²¿°´Å¥
+		// ï¿½×²ï¿½ï¿½ï¿½Å¥
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.add(ok);

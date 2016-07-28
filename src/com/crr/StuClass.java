@@ -1,6 +1,7 @@
 package com.crr;
 
 public class StuClass {
+	private int Id;
 	private String Num;
 	private String Name;
 	private String Birth;
@@ -10,9 +11,10 @@ public class StuClass {
 	private String Score;
 	private String Password;
 
-	public StuClass(String num, String name, String birth, String nation,
-			String location, String major, String score, String password) {
+	public StuClass(int id, String num, String name, String birth, String nation, String location, String major,
+			String score, String password) {
 		super();
+		Id = id;
 		Num = num;
 		Name = name;
 		Birth = birth;
@@ -21,6 +23,22 @@ public class StuClass {
 		Major = major;
 		Score = score;
 		Password = password;
+	}
+
+	public StuClass(String num, String name, String birth, String nation,
+			String location, String major, String score) {
+		super();
+		Num = num;
+		Name = name;
+		Birth = birth;
+		Nation = nation;
+		Location = location;
+		Major = major;
+		Score = score;
+	}
+	
+	public int getId() {
+		return Id;
 	}
 
 	public String getNum() {

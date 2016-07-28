@@ -17,26 +17,26 @@ public class MajorDataBase {
 		String url = "jdbc:mysql://localhost:3306/manager?user=root";
 
 		try {
-			// Ö®ËùÒÔÒªÊ¹ÓÃÏÂÃæÕâÌõÓï¾ä£¬ÊÇÒòÎªÒªÊ¹ÓÃMySQLµÄÇı¶¯£¬ËùÒÔÎÒÃÇÒª°ÑËüÇı¶¯ÆğÀ´£¬
-			// ¿ÉÒÔÍ¨¹ıClass.forName°ÑËü¼ÓÔØ½øÈ¥£¬Ò²¿ÉÒÔÍ¨¹ı³õÊ¼»¯À´Çı¶¯ÆğÀ´£¬ÏÂÃæÈıÖÖĞÎÊ½¶¼¿ÉÒÔ
-			Class.forName("com.mysql.jdbc.Driver");// ¶¯Ì¬¼ÓÔØmysqlÇı¶¯
-			System.out.println("³É¹¦¼ÓÔØMySQLÇı¶¯³ÌĞò");
-			// Ò»¸öConnection´ú±íÒ»¸öÊı¾İ¿âÁ¬½Ó
+			// ä¹‹æ‰€ä»¥è¦ä½¿ç”¨ä¸‹é¢è¿™æ¡è¯­å¥ï¼Œæ˜¯å› ä¸ºè¦ä½¿ç”¨MySQLçš„é©±åŠ¨ï¼Œæ‰€ä»¥æˆ‘ä»¬è¦æŠŠå®ƒé©±åŠ¨èµ·æ¥ï¼Œ
+			// å¯ä»¥é€šè¿‡Class.forNameæŠŠå®ƒåŠ è½½è¿›å»ï¼Œä¹Ÿå¯ä»¥é€šè¿‡åˆå§‹åŒ–æ¥é©±åŠ¨èµ·æ¥ï¼Œä¸‹é¢ä¸‰ç§å½¢å¼éƒ½å¯ä»¥
+			Class.forName("com.mysql.jdbc.Driver");//åŠ¨æ€åŠ è½½mysqlé©±åŠ¨
+			System.out.println("æˆåŠŸåŠ è½½MySQLé©±åŠ¨ç¨‹åº");
+			// ä¸€ä¸ªConnectionä»£è¡¨ä¸€ä¸ªæ•°æ®åº“è¿æ¥
 			conn = DriverManager.getConnection(url);
-			// StatementÀïÃæ´øÓĞºÜ¶à·½·¨£¬±ÈÈçexecuteUpdate¿ÉÒÔÊµÏÖ²åÈë£¬¸üĞÂºÍÉ¾³ıµÈ
+			// Statementé‡Œé¢å¸¦æœ‰å¾ˆå¤šæ–¹æ³•ï¼Œæ¯”å¦‚executeUpdateå¯ä»¥å®ç°æ’å…¥ï¼Œæ›´æ–°å’Œåˆ é™¤ç­‰
 			stmt = conn.createStatement();
 			sql = "create table if not exists major(NO int AUTO_INCREMENT,name varchar(20),primary key(NO))";
-			int result = stmt.executeUpdate(sql);// executeUpdateÓï¾ä»á·µ»ØÒ»¸öÊÜÓ°ÏìµÄĞĞÊı£¬Èç¹û·µ»Ø-1¾ÍÃ»ÓĞ³É¹¦
+			int result = stmt.executeUpdate(sql);// executeUpdateè¯­å¥ä¼šè¿”å›ä¸€ä¸ªå—å½±å“çš„è¡Œæ•°ï¼Œå¦‚æœè¿”å›-1å°±æ²¡æœ‰æˆåŠŸ
 		} catch (SQLException e) {
-			System.out.println("MySQL²Ù×÷´íÎó");
+			System.out.println("MySQLæ“ä½œé”™è¯¯");
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	void insert(String name) throws SQLException {
-		String sql = "insert into major(name) values('" + name + "')";
+	void insert(String majorName) throws SQLException {
+		String sql = "insert into major(name) values('" + majorName + "')";
 		try {
 			int result = stmt.executeUpdate(sql);
 		} catch (Exception e) {
@@ -48,11 +48,11 @@ public class MajorDataBase {
 	ArrayList<String> search1() throws SQLException {
 		ArrayList<String> mmList = new ArrayList<String>();
 		String sql = "select * from major";
-		ResultSet rs = stmt.executeQuery(sql);// executeQuery»á·µ»Ø½á¹ûµÄ¼¯ºÏ£¬·ñÔò·µ»Ø¿ÕÖµ
-		System.out.println("±àºÅ\t×¨Òµ");
+		ResultSet rs = stmt.executeQuery(sql);// executeQueryï¿½á·µï¿½Ø½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ò·µ»Ø¿ï¿½Öµ
+		System.out.println("ç¼–å·\tä¸“ä¸š");
 		while (rs.next()) {
 			mmList.add(rs.getString(2));
-			System.out.println(rs.getInt(1) + "\t" + rs.getString(2));// ÈëÈç¹û·µ»ØµÄÊÇintÀàĞÍ¿ÉÒÔÓÃgetInt()
+			System.out.println(rs.getInt(1) + "\t" + rs.getString(2));// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½intï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ï¿½ï¿½getInt()
 		}
 		return mmList;
 	}
@@ -60,8 +60,8 @@ public class MajorDataBase {
 	public ArrayList<Integer> search0() throws SQLException {
 		ArrayList<Integer> mmList = new ArrayList<Integer>();
 		String sql = "select * from major";
-		ResultSet rs = stmt.executeQuery(sql);// executeQuery»á·µ»Ø½á¹ûµÄ¼¯ºÏ£¬·ñÔò·µ»Ø¿ÕÖµ
-		System.out.println("±àºÅ\t×¨Òµ");
+		ResultSet rs = stmt.executeQuery(sql);// executeQueryï¿½á·µï¿½Ø½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ò·µ»Ø¿ï¿½Öµ
+		System.out.println("ç¼–å·\tä¸“ä¸š");
 		while (rs.next()) {
 			mmList.add(rs.getInt(1));
 		}
@@ -73,10 +73,11 @@ public class MajorDataBase {
 		System.out.println(sql);
 		stmt.execute(sql);
 	}
-	
-	
-	void update(){
-		
+
+	void update(int sel, String majorName) throws SQLException {
+		String sql = "update major set name='"+majorName+"' where NO=" + sel;
+		System.out.println(sql);
+		stmt.execute(sql);
 	}
 
 }

@@ -5,50 +5,75 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class StuDataBase {
+	private Statement stmt;
+
 	public StuDataBase() throws Exception {
 		Connection conn = null;
 		String sql;
-		String url = "jdbc:mysql://localhost:3306/manager?+"
-				+ "user=root&useUnicode=true&characterEncoding=UTF8";
+		String url = "jdbc:mysql://localhost:3306/manager?user=root";
 
 		try {
-			// Ö®ËùÒÔÒªÊ¹ÓÃÏÂÃæÕâÌõÓï¾ä£¬ÊÇÒòÎªÒªÊ¹ÓÃMySQLµÄÇı¶¯£¬ËùÒÔÎÒÃÇÒª°ÑËüÇı¶¯ÆğÀ´£¬
-			// ¿ÉÒÔÍ¨¹ıClass.forName°ÑËü¼ÓÔØ½øÈ¥£¬Ò²¿ÉÒÔÍ¨¹ı³õÊ¼»¯À´Çı¶¯ÆğÀ´£¬ÏÂÃæÈıÖÖĞÎÊ½¶¼¿ÉÒÔ
-			Class.forName("com.mysql.jdbc.Driver");// ¶¯Ì¬¼ÓÔØmysqlÇı¶¯
-			System.out.println("³É¹¦¼ÓÔØMySQLÇı¶¯³ÌĞò");
-			// Ò»¸öConnection´ú±íÒ»¸öÊı¾İ¿âÁ¬½Ó
+			// ä¹‹æ‰€ä»¥è¦ä½¿ç”¨ä¸‹é¢è¿™æ¡è¯­å¥ï¼Œæ˜¯å› ä¸ºè¦ä½¿ç”¨MySQLçš„é©±åŠ¨ï¼Œæ‰€ä»¥æˆ‘ä»¬è¦æŠŠå®ƒé©±åŠ¨èµ·æ¥ï¼Œ
+			// å¯ä»¥é€šè¿‡Class.forNameæŠŠå®ƒåŠ è½½è¿›å»ï¼Œä¹Ÿå¯ä»¥é€šè¿‡åˆå§‹åŒ–æ¥é©±åŠ¨èµ·æ¥ï¼Œä¸‹é¢ä¸‰ç§å½¢å¼éƒ½å¯ä»¥
+			Class.forName("com.mysql.jdbc.Driver");// åŠ¨æ€åŠ è½½mysqlé©±åŠ¨
+			System.out.println("æˆåŠŸåŠ è½½MySQLé©±åŠ¨ç¨‹åº");
+			// ä¸€ä¸ªConnectionä»£è¡¨ä¸€ä¸ªæ•°æ®åº“è¿æ¥
 			conn = DriverManager.getConnection(url);
-			// StatementÀïÃæ´øÓĞºÜ¶à·½·¨£¬±ÈÈçexecuteUpdate¿ÉÒÔÊµÏÖ²åÈë£¬¸üĞÂºÍÉ¾³ıµÈ
-			Statement stmt = conn.createStatement();
-			sql = "create table if not exists student(NO char(20),name varchar(20),primary key(NO))";
-			int result = stmt.executeUpdate(sql);// executeUpdateÓï¾ä»á·µ»ØÒ»¸öÊÜÓ°ÏìµÄĞĞÊı£¬Èç¹û·µ»Ø-1¾ÍÃ»ÓĞ³É¹¦
-			if (result != -1) {
-				System.out.println("´´½¨Êı¾İ±í³É¹¦");
-				// sql =
-				// "insert into student(NO,name) values('2012001','ZhangShan')";
-				// result = stmt.executeUpdate(sql);
-				// sql =
-				// "insert into student(NO,name) values('2012002','LiSi')";
-				// result = stmt.executeUpdate(sql);
-				sql = "select * from student";
-				ResultSet rs = stmt.executeQuery(sql);// executeQuery»á·µ»Ø½á¹ûµÄ¼¯ºÏ£¬·ñÔò·µ»Ø¿ÕÖµ
-				System.out.println("Ñ§ºÅ\tĞÕÃû");
-				while (rs.next()) {
-					System.out
-							.println(rs.getString(1) + "\t" + rs.getString(2));// ÈëÈç¹û·µ»ØµÄÊÇintÀàĞÍ¿ÉÒÔÓÃgetInt()
-				}
-			} else {
-				System.out.println("111");
-			}
+			// Statementé‡Œé¢å¸¦æœ‰å¾ˆå¤šæ–¹æ³•ï¼Œæ¯”å¦‚executeUpdateå¯ä»¥å®ç°æ’å…¥ï¼Œæ›´æ–°å’Œåˆ é™¤ç­‰
+			stmt = conn.createStatement();
+			sql = "create table if not exists student(NO int AUTO_INCREMENT,stunum varchar(20)," + "name varchar(20),"
+					+ "birthday varchar(20),mz varchar(20),jg varchar(20),zy varchar(20),passwd varchar(20),score varchar(20),primary key(NO))";
+			int result = stmt.executeUpdate(sql);// executeUpdateè¯­å¥ä¼šè¿”å›ä¸€ä¸ªå—å½±å“çš„è¡Œæ•°ï¼Œå¦‚æœè¿”å›-1å°±æ²¡æœ‰æˆåŠŸ
 		} catch (SQLException e) {
-			System.out.println("MySQL²Ù×÷´íÎó");
+			System.out.println("MySQLæ“ä½œé”™è¯¯");
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			conn.close();
 		}
 	}
+
+	void insert(StuClass stuClass) throws SQLException {
+		String sql = "insert into student(stunum,name,birthday,mz,jg,zy,passwd,score) values('" + stuClass.getNum()
+				+ "','" + stuClass.getName() + "','" + stuClass.getBirth() + "','" + stuClass.getNation() + "','"
+				+ stuClass.getLocation() + "','" + stuClass.getMajor() + "','123456','" + stuClass.getScore() + "')";
+		try {
+			int result = stmt.executeUpdate(sql);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	ArrayList<StuClass> search() throws SQLException {
+		ArrayList<StuClass> tList = new ArrayList<StuClass>();
+		String sql = "select * from student";
+		ResultSet rs = stmt.executeQuery(sql);// executeQueryï¿½á·µï¿½Ø½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ò·µ»Ø¿ï¿½Öµ
+		System.out.println("ç¼–å·\tä¸“ä¸š");
+		while (rs.next()) {
+			StuClass stuClass = new StuClass(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+					rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
+			tList.add(stuClass);
+			System.out.println(rs.getInt(1) + "\t" + rs.getString(3));// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½intï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ï¿½ï¿½getInt()
+		}
+		return tList;
+	}
+
+	void delete(int sel) throws SQLException {
+		String sql = "delete from student where NO=" + sel;
+		System.out.println(sql);
+		stmt.execute(sql);
+	}
+
+	void update(int sel, StuClass stuClass) throws SQLException {
+		String sql = "update student set stunum='" + stuClass.getNum() + "',name='" + stuClass.getName()
+				+ "',birthday='" + stuClass.getBirth() + "',mz='" + stuClass.getNation() + "',jg='"
+				+ stuClass.getLocation() + "',zy='" + stuClass.getMajor() + "',score='" + stuClass.getScore()
+				+ "' where NO=" + sel;
+		System.out.println(sql);
+		stmt.execute(sql);
+	}
+
 }

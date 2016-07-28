@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 public class StudentUI {
-	private JFrame frame = new JFrame("ÄãÊÇÑ§Éú");
+	private JFrame frame = new JFrame("ä½ æ˜¯å­¦ç”Ÿ");
 	private Container c = frame.getContentPane();
 
 	public StudentUI() {
@@ -22,7 +22,7 @@ public class StudentUI {
 	}
 
 	private void initFrame() {
-		JLabel l1 = new JLabel("»¶Ó­µÇÂ¼Ñ§Ğ£ºóÌ¨¹ÜÀíÏµÍ³¡­");
+		JLabel l1 = new JLabel("æ¬¢è¿ç™»å½•å­¦æ ¡åå°ç®¡ç†ç³»ç»Ÿâ€¦");
 		l1.setBounds(65, 20, 300, 50);
 		l1.setFont(new java.awt.Font("Dialog", 1, 20));
 		c.add(l1);
