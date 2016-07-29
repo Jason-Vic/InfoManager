@@ -4,15 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import com.crr.app.LoginUI;
@@ -47,7 +43,7 @@ public class StudentUI {
 		JLabel major = new JLabel("专业:   " + stu.getMajor());
 		JLabel score = new JLabel("成绩:   " + stu.getScore());
 		JButton edit = new JButton("修改密码");
-		JButton exit = new JButton("退出");
+		JButton exit = new JButton("重新登录");
 
 		l1.setBounds(50, 10, 300, 50);
 		stunum.setBounds(80, 70, 300, 30);
@@ -123,8 +119,7 @@ public class StudentUI {
 
 				chpassframe.setResizable(false);
 				chpassframe.setLocationRelativeTo(null);
-				chpassframe
-						.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+				chpassframe.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				chpassframe.setVisible(true);
 
 				ok.addActionListener(new ActionListener() {
@@ -132,34 +127,22 @@ public class StudentUI {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						System.out.println("------"
-								+ String.valueOf(nptx.getPassword()) + "-----"
-								+ String.valueOf(nnptx.getPassword()) + "-----"
-								+ String.valueOf(optx.getPassword()));
-						if (String.valueOf(nptx.getPassword()).equals(
-								String.valueOf(nnptx.getPassword())) != true) {
-							JOptionPane.showMessageDialog(
-									frame.getContentPane(), "两次密码不一致!", "系统信息",
+
+						if (String.valueOf(nptx.getPassword()).equals(String.valueOf(nnptx.getPassword())) != true) {
+							JOptionPane.showMessageDialog(chpassframe.getContentPane(), "两次密码不一致!", "系统信息",
 									JOptionPane.ERROR_MESSAGE);
-						} else if (String.valueOf(optx.getPassword()).equals(
-								stu.getPassword()) != true) {
-							JOptionPane.showMessageDialog(
-									frame.getContentPane(), "原始密码有误!", "系统信息",
+						} else if (String.valueOf(optx.getPassword()).equals(stu.getPassword()) != true) {
+							JOptionPane.showMessageDialog(chpassframe.getContentPane(), "原始密码有误!", "系统信息",
 									JOptionPane.ERROR_MESSAGE);
-						} else if (String.valueOf(nptx.getPassword()).trim()
-								.length() == 0
-								|| String.valueOf(nnptx.getPassword()).trim()
-										.length() == 0) {
-							JOptionPane.showMessageDialog(
-									frame.getContentPane(), "请输入正确格式的密码!",
-									"系统信息", JOptionPane.ERROR_MESSAGE);
+						} else if (String.valueOf(nptx.getPassword()).trim().length() == 0
+								|| String.valueOf(nnptx.getPassword()).trim().length() == 0) {
+							JOptionPane.showMessageDialog(chpassframe.getContentPane(), "请输入正确格式的密码!", "系统信息",
+									JOptionPane.ERROR_MESSAGE);
 						} else {
 							stu.setPasswd(String.valueOf(nptx.getPassword()));
 							try {
 								stuDataBase.updatePasswd(stu.getId(), stu);
-								JOptionPane.showMessageDialog(
-										frame.getContentPane(),
-										"密码更新成功,请重新登陆!", "系统信息",
+								JOptionPane.showMessageDialog(chpassframe.getContentPane(), "密码更新成功,请重新登陆!", "系统信息",
 										JOptionPane.ERROR_MESSAGE);
 								chpassframe.dispose();
 								frame.dispose();
@@ -179,6 +162,7 @@ public class StudentUI {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						chpassframe.dispose();
+
 					}
 				});
 			}
@@ -189,7 +173,14 @@ public class StudentUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+
 				frame.dispose();
+				try {
+					new LoginUI();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 	}

@@ -25,8 +25,7 @@ public class StuClass {
 		Password = password;
 	}
 
-	public StuClass(String num, String name, String birth, String nation,
-			String location, String major, String score) {
+	public StuClass(String num, String name, String birth, String nation, String location, String major) {
 		super();
 		Num = num;
 		Name = name;
@@ -34,12 +33,21 @@ public class StuClass {
 		Nation = nation;
 		Location = location;
 		Major = major;
-		Score = score;
 	}
-	
+
 	public StuClass(String numS, String nameS, String majorS, String scoreS) {
 		Num = numS;
 		Name = nameS;
+		Major = majorS;
+		Score = scoreS;
+	}
+
+	public StuClass(String numS, String nameS, String birthS, String mzS, String jgS, String majorS, String scoreS) {
+		Num = numS;
+		Name = nameS;
+		Birth = birthS;
+		Nation = mzS;
+		Location = jgS;
 		Major = majorS;
 		Score = scoreS;
 	}
@@ -79,8 +87,8 @@ public class StuClass {
 	public String getPassword() {
 		return Password;
 	}
-	
-	public void setPasswd(String passwd){
+
+	public void setPasswd(String passwd) {
 		Password = passwd;
 	}
 

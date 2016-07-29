@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,36 +16,38 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
-
+import com.crr.app.LoginUI;
+import com.crr.database.MajorDataBase;
 import com.crr.database.StuDataBase;
-import com.crr.database.TeaDataBase;
 import com.crr.entity.StuClass;
-import com.crr.entity.TeacherClass;
 
 public class TeacherUI {
 	private StuDataBase stuDataBase;
+	private static MajorDataBase majorDataBase;
+	private String thisMajor;
 
-	public TeacherUI() throws Exception {
+	public TeacherUI(String majorT) throws Exception {
+		thisMajor = majorT;
 		final JFrame mScoreFrame = new JFrame("学生成绩管理");
 		stuDataBase = new StuDataBase();
+		majorDataBase = new MajorDataBase();
 		Container mm = mScoreFrame.getContentPane();
 		JPanel jPanel = new JPanel();
 		JButton tShow = new JButton("查看");
 		JButton tAdd = new JButton("添加");
 		JButton tEdit = new JButton("修改");
 		JButton tSearch = new JButton("查询");
-		final JFrame addFreame = new JFrame("录入成绩");
+		JButton tReLogin = new JButton("重新登录");
+
 		final JTable tTable;
-		final JTextField num = new JTextField();
-		final JTextField name = new JTextField();
-		final JTextField major = new JTextField();
-		final JTextField score = new JTextField();
+
 		ArrayList<StuClass> tList = new ArrayList<StuClass>();
 
+		
+		//初始化教师界面 一个表格的数据适配和几个按钮的监控
 		mScoreFrame.setSize(600, 400);
 		try {
-			tList = stuDataBase.search();
-			System.out.println("----2");
+			tList = stuDataBase.searchMajor(thisMajor);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,6 +81,8 @@ public class TeacherUI {
 		jPanel.add(tEdit);
 		tSearch.setBounds(240, 230, 60, 30);
 		jPanel.add(tSearch);
+		tReLogin.setBounds(310, 230, 60, 30);
+		jPanel.add(tReLogin);
 		mm.add(jPanel, BorderLayout.SOUTH);
 
 		mScoreFrame.setResizable(false);
@@ -93,8 +96,8 @@ public class TeacherUI {
 				// TODO Auto-generated method stub
 				int row = tTable.getSelectedRow();
 				if (row == -1) {
-					JOptionPane.showMessageDialog(mScoreFrame.getContentPane(),
-							"请选中需要查看的数据!", "系统信息", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(mScoreFrame.getContentPane(), "请选中需要查看的数据!", "系统信息",
+							JOptionPane.ERROR_MESSAGE);
 				} else {
 					int sel = (int) tTable.getValueAt(row, 0);
 					final JFrame frame = new JFrame("学生信息");
@@ -156,8 +159,11 @@ public class TeacherUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				addFreame
-						.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+				final JFrame addFreame = new JFrame("录入成绩");
+				final JTextField num = new JTextField();
+				final JTextField name = new JTextField();
+				final JTextField score = new JTextField();
+				addFreame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				addFreame.repaint();
 				score.repaint();
 				Container addc = addFreame.getContentPane();
@@ -173,11 +179,14 @@ public class TeacherUI {
 				addc.add(namelb);
 				name.setBounds(65, 40, 160, 25);
 				addc.add(name);
+
 				JLabel majorlb = new JLabel("专    业:");
 				majorlb.setBounds(10, 70, 50, 25);
 				addc.add(majorlb);
-				major.setBounds(65, 70, 160, 25);
-				addc.add(major);
+
+				JLabel majorlbT = new JLabel(thisMajor);
+				majorlbT.setBounds(65, 70, 160, 25);
+				addc.add(majorlbT);
 				JLabel scorelb = new JLabel("分    数:");
 				scorelb.setBounds(10, 100, 50, 25);
 				addc.add(scorelb);
@@ -203,22 +212,17 @@ public class TeacherUI {
 						String birthS = "notSet";
 						String mzS = "notSet";
 						String jgS = "notSet";
-						String majorS = major.getText();
+						String majorS = thisMajor;
 						String scoreS = score.getText();
-						if ((numS.trim().length() != 0)
-								&& (nameS.trim().length() != 0)
-								&& (birthS.trim().length() != 0)
-								&& (mzS.trim().length() != 0)
-								&& (jgS.trim().length() != 0)
-								&& (majorS.trim().length() != 0)
-								&& (scoreS.trim().length() != 0)) {
+						if ((numS.trim().length() != 0) && (nameS.trim().length() != 0) && (birthS.trim().length() != 0)
+								&& (mzS.trim().length() != 0) && (jgS.trim().length() != 0)
+								&& (majorS.trim().length() != 0) && (scoreS.trim().length() != 0)) {
 							try {
-								StuClass stuClass = new StuClass(numS, nameS,
-										birthS, mzS, jgS, majorS, scoreS);
+								StuClass stuClass = new StuClass(numS, nameS, birthS, mzS, jgS, majorS, scoreS);
 								stuDataBase.insert(stuClass);
 								addFreame.dispose();
 								mScoreFrame.dispose();
-								new TeacherUI();
+								new TeacherUI(thisMajor);
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -227,10 +231,8 @@ public class TeacherUI {
 								e1.printStackTrace();
 							}
 						} else {
-							addFreame.dispose();
-							JOptionPane.showMessageDialog(
-									mScoreFrame.getContentPane(), "请填写正确的数据!",
-									"系统信息", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(addFreame.getContentPane(), "请填写正确的数据!", "系统信息",
+									JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});
@@ -252,44 +254,58 @@ public class TeacherUI {
 			public void actionPerformed(ActionEvent e) {
 				int row = tTable.getSelectedRow();
 				if (row == -1) {
-					JOptionPane.showMessageDialog(mScoreFrame.getContentPane(),
-							"请选中需要修改的数据!", "系统信息", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(mScoreFrame.getContentPane(), "请选中需要修改的数据!", "系统信息",
+							JOptionPane.ERROR_MESSAGE);
 				} else {
 					final int sel = (int) tTable.getValueAt(row, 0);
 					final JFrame editFrame = new JFrame("修改学生信息");
 					final JTextField num = new JTextField();
 					final JTextField name = new JTextField();
-					final JTextField major = new JTextField();
 					final JTextField score = new JTextField();
+					StuClass stuClass = null;
 					Container editc = editFrame.getContentPane();
+					try {
+						stuClass = stuDataBase.searchOne(sel);
+					} catch (SQLException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
 					editc.setLayout(null);
 					editFrame.setSize(250, 200);
 					JLabel numlb = new JLabel("学    号:");
-					numlb.setBounds(10, 10, 50, 25);
-					editc.add(numlb);
-					num.setBounds(65, 10, 160, 25);
-					editc.add(num);
 					JLabel namelb = new JLabel("姓    名:");
-					namelb.setBounds(10, 40, 50, 25);
-					editc.add(namelb);
-					name.setBounds(65, 40, 160, 25);
-					editc.add(name);
 					JLabel majorlb = new JLabel("专    业:");
-					majorlb.setBounds(10, 70, 50, 25);
-					editc.add(majorlb);
-					major.setBounds(65, 70, 160, 25);
-					editc.add(major);
+					JLabel majorlbT = new JLabel(thisMajor);
 					JLabel scorelb = new JLabel("分    数:");
-					scorelb.setBounds(10, 100, 50, 25);
-					editc.add(scorelb);
-					score.setBounds(65, 100, 160, 25);
-					editc.add(score);
 					JButton ok = new JButton("修改");
-					ok.setBounds(45, 135, 60, 30);
-					editc.add(ok);
 					JButton cancel = new JButton("取消");
+
+					numlb.setBounds(10, 10, 50, 25);
+					num.setBounds(65, 10, 160, 25);
+					namelb.setBounds(10, 40, 50, 25);
+					name.setBounds(65, 40, 160, 25);
+					majorlb.setBounds(10, 70, 50, 25);
+					majorlbT.setBounds(65, 70, 160, 25);
+					scorelb.setBounds(10, 100, 50, 25);
+					score.setBounds(65, 100, 160, 25);
+					ok.setBounds(45, 135, 60, 30);
 					cancel.setBounds(135, 135, 60, 30);
+
+					num.setText((String) tTable.getValueAt(row, 1));
+					name.setText((String) tTable.getValueAt(row, 2));
+					score.setText(stuClass.getScore());
+
+					editc.add(numlb);
+					editc.add(num);
+					editc.add(namelb);
+					editc.add(name);
+					editc.add(majorlb);
+					editc.add(majorlbT);
+					editc.add(scorelb);
+					editc.add(score);
+					editc.add(ok);
 					editc.add(cancel);
+
 					editFrame.setLocationRelativeTo(null);
 					editFrame.setResizable(false);
 					editFrame.setVisible(true);
@@ -302,18 +318,16 @@ public class TeacherUI {
 							String numS = num.getText();
 							String nameS = name.getText();
 							String scoreS = score.getText();
-							String majorS = major.getText();
+							String majorS = thisMajor;
 
-							if ((numS.trim().length() != 0)
-									&& (nameS.trim().length() != 0)
-									&& (majorS.trim().length() != 0)
-									&& (scoreS.trim().length() != 0)) {
+							if ((numS.trim().length() != 0) && (nameS.trim().length() != 0)
+									&& (majorS.trim().length() != 0) && (scoreS.trim().length() != 0)) {
 								try {
-									StuClass stuClass = new StuClass(numS,
-											nameS, majorS, scoreS);
+									StuClass stuClass = new StuClass(numS, nameS, majorS, scoreS);
 									stuDataBase.updateScore(sel, stuClass);
 									mScoreFrame.dispose();
-									new TeacherUI();
+									mScoreFrame.repaint();
+									new TeacherUI(thisMajor);
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -322,9 +336,7 @@ public class TeacherUI {
 									e1.printStackTrace();
 								}
 							} else {
-								JOptionPane.showMessageDialog(
-										mScoreFrame.getContentPane(),
-										"请填写正确的数据!", "系统信息",
+								JOptionPane.showMessageDialog(mScoreFrame.getContentPane(), "请填写正确的数据!", "系统信息",
 										JOptionPane.ERROR_MESSAGE);
 							}
 							editFrame.dispose();
@@ -343,9 +355,9 @@ public class TeacherUI {
 				}
 			}
 		});
-		
+
 		tSearch.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -374,17 +386,14 @@ public class TeacherUI {
 							if (num.getText().trim().length() != 0) {
 								ArrayList<StuClass> tList = new ArrayList<StuClass>();
 								try {
-									tList = stuDataBase.search(num.getText()
-											.trim());
+									tList = stuDataBase.search(num.getText().trim(),thisMajor);
 									if (tList.size() > 0) {
 										searchFreame.dispose();
 										new SearchStuUI(tList, 2);
 									} else {
 										searchFreame.dispose();
-										JOptionPane.showMessageDialog(
-												searchFreame.getContentPane(),
-												"没有相关学生信息!", "系统信息",
-												JOptionPane.ERROR_MESSAGE);
+										JOptionPane.showMessageDialog(searchFreame.getContentPane(), "没有相关学生信息!",
+												"系统信息", JOptionPane.ERROR_MESSAGE);
 									}
 								} catch (SQLException e1) {
 									// TODO Auto-generated catch block
@@ -394,9 +403,7 @@ public class TeacherUI {
 									e1.printStackTrace();
 								}
 							} else {
-								JOptionPane.showMessageDialog(
-										searchFreame.getContentPane(),
-										"请填写正确的数据!", "系统信息",
+								JOptionPane.showMessageDialog(searchFreame.getContentPane(), "请填写正确的数据!", "系统信息",
 										JOptionPane.ERROR_MESSAGE);
 							}
 						}
@@ -413,7 +420,22 @@ public class TeacherUI {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			
+
+			}
+		});
+
+		tReLogin.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				mScoreFrame.dispose();
+				try {
+					new LoginUI();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 	}

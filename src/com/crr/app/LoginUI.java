@@ -25,6 +25,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+
+/*
+ * 登录界面
+ */
 public class LoginUI {
 	private JFrame frame = new JFrame("登录");
 	private Container c = frame.getContentPane();
@@ -42,11 +46,12 @@ public class LoginUI {
 	private TeaDataBase teaDataBase;
 	private StuDataBase stuDataBase;
 
-	private ArrayList<String> usernameList;
-	private ArrayList<String> passwdList;
+	private ArrayList<String> usernameList;   //保存从数据库中得到的帐号表
+	private ArrayList<String> passwdList;     //保存从数据库中得到的密码表
+	private ArrayList<String> majorList;      //保存从数据库中得到的专业表
 
 	public LoginUI() throws Exception {
-		adminDataBase = new AdminDataBase();
+		adminDataBase = new AdminDataBase();  //初始化数据库
 		teaDataBase = new TeaDataBase();
 		stuDataBase = new StuDataBase();
 
@@ -61,9 +66,9 @@ public class LoginUI {
 				String mUsername = username.getText();
 				String mPasswd = String.valueOf(password.getPassword());
 				ArrayList<StuClass> tList = new ArrayList<StuClass>();
-				if (mUsername.trim().length() != 0
-						&& mPasswd.trim().length() != 0) {
-					if (stu.isSelected()) {
+				if (mUsername.trim().length() != 0 && mPasswd.trim().length() != 0) {
+					//如果学生选项被选中，后面的老师/管理员不再重复
+					if (stu.isSelected()) {  
 						try {
 							usernameList = stuDataBase.searchUser();
 							passwdList = stuDataBase.searchPasswd();
@@ -72,41 +77,40 @@ public class LoginUI {
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
 						}
+						//比较填写的帐号密码和数据库中是否一致
 						for (int i = 0; i < usernameList.size(); i++) {
-							if (mUsername.equals(usernameList.get(i))
-									&& mPasswd.equals(passwdList.get(i))) {
+							if (mUsername.equals(usernameList.get(i)) && mPasswd.equals(passwdList.get(i))) {
 								try {
+									//新建学生界面
 									new StudentUI(tList.get(i));
-									state = true;
+									state = true;   //登录是否成功状态位
 								} catch (Exception e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
-								frame.dispose();
+								frame.dispose();  //登录界面释放
 							}
 						}
+						//如果登录失败
 						if (!state) {
-							JOptionPane.showMessageDialog(
-									frame.getContentPane(), "账号或密码错误!", "系统信息",
+							JOptionPane.showMessageDialog(frame.getContentPane(), "账号或密码错误!", "系统信息",
 									JOptionPane.ERROR_MESSAGE);
 						}
-						frame.repaint();
+						frame.repaint();  //界面重绘
 					} else if (tercher.isSelected()) {
 						try {
 							usernameList = teaDataBase.searchUser();
 							passwdList = teaDataBase.searchPasswd();
+							majorList = teaDataBase.searchMajor();
 						} catch (SQLException e2) {
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
 						}
 						for (int i = 0; i < usernameList.size(); i++) {
-							System.out.println(mUsername + "----" + mPasswd
-									+ "-----" + usernameList.get(i) + "-------"
-									+ passwdList.get(i));
-							if (mUsername.equals(usernameList.get(i))
-									&& mPasswd.equals(passwdList.get(i))) {
+
+							if (mUsername.equals(usernameList.get(i)) && mPasswd.equals(passwdList.get(i))) {
 								try {
-									new TeacherUI();
+									new TeacherUI(majorList.get(i));
 									state = true;
 								} catch (Exception e1) {
 									// TODO Auto-generated catch block
@@ -116,8 +120,7 @@ public class LoginUI {
 							}
 						}
 						if (!state) {
-							JOptionPane.showMessageDialog(
-									frame.getContentPane(), "账号或密码错误!", "系统信息",
+							JOptionPane.showMessageDialog(frame.getContentPane(), "账号或密码错误!", "系统信息",
 									JOptionPane.ERROR_MESSAGE);
 						}
 						frame.repaint();
@@ -130,8 +133,7 @@ public class LoginUI {
 							e2.printStackTrace();
 						}
 						for (int i = 0; i < usernameList.size(); i++) {
-							if (mUsername.equals(usernameList.get(i))
-									&& mPasswd.equals(passwdList.get(i))) {
+							if (mUsername.equals(usernameList.get(i)) && mPasswd.equals(passwdList.get(i))) {
 								try {
 									new AdminUI();
 									state = true;
@@ -143,15 +145,14 @@ public class LoginUI {
 							}
 						}
 						if (!state) {
-							JOptionPane.showMessageDialog(
-									frame.getContentPane(), "账号或密码错误!", "系统信息",
+							JOptionPane.showMessageDialog(frame.getContentPane(), "账号或密码错误!", "系统信息",
 									JOptionPane.ERROR_MESSAGE);
 						}
 						frame.repaint();
 					}
 				} else {
-					JOptionPane.showMessageDialog(frame.getContentPane(),
-							"请填写正确的数据!", "系统信息", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(frame.getContentPane(), "请填写正确的数据!", "系统信息",
+							JOptionPane.ERROR_MESSAGE);
 					frame.repaint();
 				}
 			}
@@ -172,7 +173,6 @@ public class LoginUI {
 	}
 
 	private void initFrame() {
-		// ����
 		JPanel titlePanel = new JPanel();
 		titlePanel.setLayout(new FlowLayout());
 		JLabel lt = new JLabel("请登录");
@@ -180,7 +180,6 @@ public class LoginUI {
 		titlePanel.add(lt);
 		c.add(titlePanel, "North");
 
-		// �в���
 		JPanel fieldPanel = new JPanel();
 		fieldPanel.setLayout(null);
 		JLabel l1 = new JLabel("登陆名:");
@@ -210,7 +209,6 @@ public class LoginUI {
 		fieldPanel.add(adminer);
 		c.add(fieldPanel, "Center");
 
-		// �ײ���ť
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.add(ok);
